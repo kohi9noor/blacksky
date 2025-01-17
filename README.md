@@ -1,6 +1,6 @@
 # blacksky
 
-An Electron application with React and TypeScript
+database backup utility that can backup and restore any DB
 
 ## Recommended IDE Setup
 
