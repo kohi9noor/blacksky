@@ -1,0 +1,14 @@
+{
+  "db": {
+    "type": "mongodb",
+    "host": "localhost",
+    "port": 27017,
+    "username": "admin",
+    "password": "secret",
+    "database": "test.db "
+  },
+  "backupPath": "D:\\kohinoor\\projects\\blacksky\\backups",
+  "slackUsers": [
+    "kohinoornimes@gmail.com"
+  ]
+}
