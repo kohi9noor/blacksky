@@ -1,13 +1,13 @@
 {
   "name": "blacksky",
   "version": "1.0.0",
-  "main": "lib/main.ts",
+  "main": "lib/app.js",
   "scripts": {
     "build": "npx tsc",
     "help": "npx ts-node ./src/app.ts",
     "backup": "npx ts-node ./src/app.ts backup",
     "config": "npx ts-node src/app.ts configure",
-    "schedule": "npx ts-node ./src/app.ts schedule",
+    "schedule": "npx ts-node ./src/app.ts schedule -t */5 * * * *",
     "backup:mysql": "npx ts-node ./src/app.ts backup -d mysql",
     "backup:postgres": "npx ts-node ./src/app.ts backup -d postgres",
     "backup:mongodb": "npx ts-node ./src/app.ts backup -d mongodb",
@@ -23,7 +23,6 @@
     "type": "git",
     "url": "git+https://github.com/kohi9noor/blacksky.git"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {

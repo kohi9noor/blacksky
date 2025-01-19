@@ -120,22 +120,22 @@ program
 program
   .command("restore")
   .description("Restores the database from a backup file or cloud storage")
-  .requiredOption(
-    "-d, --db <db>",
-    "Database type (mysql, postgres, mongodb, sqlite)"
-  )
   .option("--cloud", "Restore from cloud storage")
   .option("--provider <provider>", "Cloud provider (s3, google, azure)")
   .option("--bucket <bucketName>", "Name of the cloud storage bucket")
   .option("--dry-run", "Perform a dry run without actually restoring")
   .action(
     async (options: {
-      db: string;
       cloud?: boolean;
       provider?: string;
       bucket?: string;
       dryRun?: boolean;
     }) => {
+      const config = require("../config.json");
+      if (!config) {
+        logger.error("Database configuration is required for restore");
+        process.exit(1);
+      }
       try {
         const allowedDatabases: DatabaseType[] = [
           "mysql",
@@ -143,7 +143,8 @@ program
           "mongodb",
           "sqlite",
         ];
-        if (!allowedDatabases.includes(options.db as DatabaseType)) {
+
+        if (!allowedDatabases.includes(config.db.type as DatabaseType)) {
           logger.error(
             "Invalid database type. Allowed values are mysql, postgres, mongodb, sqlite"
           );
@@ -156,7 +157,7 @@ program
         }
 
         const restoreOptions: RestoreOptions = {
-          db: options.db as DatabaseType,
+          db: config.db.type as DatabaseType,
           cloud:
             options.cloud && cloudProvider && options.bucket
               ? {
@@ -184,23 +185,23 @@ program
     "-t, --time <cronTime>",
     "cron expression to schedule backups"
   )
-  .requiredOption(
-    "-d, --db <db>",
-    "Database type (mysql, postgres, mongodb, sqlite)"
-  )
   .option("--cloud-provider <provider>", "Cloud provider (aws, gcp, azure)")
   .option("--cloud-bucket <bucketName>", "Name of the cloud storage bucket")
   .action(
     (options: {
       time: string;
-      db: string;
       cloudProvider?: string;
       cloudBucket?: string;
       dryRun?: boolean;
     }) => {
       try {
+        const config = require("../config.json");
+        if (!config.db) {
+          logger.error("Database configuration is required for scheduling");
+          process.exit(1);
+        }
         const backupOption: BackupOptions = {
-          db: options.db as DatabaseType,
+          db: config.db as DatabaseType,
           cloud:
             options.cloudProvider && options.cloudBucket
               ? {
